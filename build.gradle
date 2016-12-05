@@ -1,0 +1,42 @@
+buildscript {
+    repositories {
+        jcenter()
+        mavenCentral()
+    }
+    dependencies {
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+
+
+sourceSets {
+    main {
+        java {
+            // srcDir 'generated/src/main/java'
+            // exclude 'some/unwanted/package/**'
+        }
+    }
+}
+
+jar {
+    baseName = 'images2gpx'
+    version =  '0.1.0'
+}
+
+repositories {
+    mavenCentral()
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+dependencies {
+    compile "com.beust:jcommander:1.48"
+    compile 'org.apache.commons:commons-lang3:3.5'
+    compile 'com.drewnoakes:metadata-extractor:2.9.1'
+
+    testCompile("junit:junit:4.12")
+}
