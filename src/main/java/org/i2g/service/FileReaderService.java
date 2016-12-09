@@ -36,11 +36,9 @@ public class FileReaderService {
             } else {
                 if (fileEntry.getName().endsWith(".jpg")) {
                     imageFiles.add(fileEntry);
-                    System.out.println("added " + fileEntry.getName());
                 }
             }
         }
-        System.out.println(String.format("Found %d image image files", imageFiles.size()));
         return imageFiles;
     }
 }

@@ -37,7 +37,7 @@ public class Images2GpxJCommanderClient {
 
         // read files and metadata
         List<File> allImageFiles = fileReaderService.readFiles(this.imageDirectory);
-        System.out.println("Files: ");
+        System.out.println(String.format("%s Files :", allImageFiles.size()));
         allImageFiles.forEach(f -> System.out.println(String.format("\t-%s", f.getAbsoluteFile())));
 
         // write coordinates to file
