@@ -3,16 +3,24 @@ package org.i2g.client;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import org.apache.commons.lang3.StringUtils;
+import org.i2g.service.FileReaderService;
+
+import java.io.File;
+import java.util.List;
 
 public class Images2GpxJCommanderClient {
 
     @Parameter(names = {"-i", "--imageDirectory"}, description = "Directory containing your images", required = true)
+    private
     String imageDirectory;
 
     @Parameter(names = {"-o", "--outputDirectory"}, description = "Output directory")
+    private
     String outputDirectory;
 
-    String filepath;
+    private String filepath;
+
+    private FileReaderService fileReaderService = FileReaderService.getInstance();
 
     public static void main(String[] args) {
         Images2GpxJCommanderClient c = new Images2GpxJCommanderClient();
@@ -20,7 +28,7 @@ public class Images2GpxJCommanderClient {
         c.run();
     }
 
-    public void run() {
+    private void run() {
         this.outputDirectory = StringUtils.isEmpty(outputDirectory) ? System.getProperty("user.dir") : outputDirectory;
         this.filepath = createAndGetOutputFilePath();
 
@@ -28,7 +36,9 @@ public class Images2GpxJCommanderClient {
         System.out.println(String.format("Writing to %s", this.filepath));
 
         // read files and metadata
-        // service.readFiles()
+        List<File> allImageFiles = fileReaderService.readFiles(this.imageDirectory);
+        System.out.println("Files: ");
+        allImageFiles.forEach(f -> System.out.println(String.format("\t-%s", f.getAbsoluteFile())));
 
         // write coordinates to file
         // writer.write(fileLocationMapping, InputStream);
