@@ -1,15 +1,23 @@
 buildscript {
+    ext {
+        springBootVersion = '1.4.2.RELEASE'
+    }
     repositories {
         jcenter()
         mavenCentral()
     }
     dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
     }
 }
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
 
 
 sourceSets {
@@ -30,13 +38,13 @@ repositories {
     mavenCentral()
 }
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
 
 dependencies {
     compile "com.beust:jcommander:1.48"
     compile 'org.apache.commons:commons-lang3:3.5'
     compile 'com.drewnoakes:metadata-extractor:2.9.1'
+    compile('org.springframework.boot:spring-boot-starter')
 
+    testCompile('org.springframework.boot:spring-boot-starter-test')
     testCompile("junit:junit:4.12")
 }
