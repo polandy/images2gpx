@@ -11,11 +11,11 @@ import java.io.IOException;
 
 public class MetadataReaderServiceTest {
 
-    MetadataReaderService service = MetadataReaderService.getInstance();
+    MetadataReaderService service = new MetadataReaderService();
     private static final Double TOLERANCE = 0.01;
 
-    public static final String IMAGE_WITH_GPS_DATA_PATH = "images/image_with_gps_data.jpg";
-    public static final String IMAGE_WITHOUT_GPS_DATA_PATH = "images/image_without_gps_data.jpg";
+    public static final String IMAGE_WITH_GPS_DATA_PATH = "/images/image_with_gps_data.jpg";
+    public static final String IMAGE_WITHOUT_GPS_DATA_PATH = "/images/image_without_gps_data.jpg";
 
     @Test
     public void shouldReadCorrectGeolocation() throws ImageProcessingException, IOException {

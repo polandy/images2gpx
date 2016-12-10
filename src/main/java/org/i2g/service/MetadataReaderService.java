@@ -4,21 +4,12 @@ package org.i2g.service;
 import com.drew.lang.GeoLocation;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.exif.GpsDirectory;
+import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 
-public class MetadataReaderService {
-
-    private static MetadataReaderService instance;
-
-    private MetadataReaderService() {}
-
-    public static MetadataReaderService getInstance() {
-        if (instance == null) {
-            instance = new MetadataReaderService();
-        }
-        return instance;
-    }
+@Service
+public class MetadataReaderService implements MetadataReader{
 
     public GeoLocation getGeolocation(Metadata metadata) {
         GeoLocation geoLocation = null;
