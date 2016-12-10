@@ -20,7 +20,7 @@ public class Images2GpxJCommanderClient {
 
     private String filepath;
 
-    private FileReaderService fileReaderService = FileReaderService.getInstance();
+    private FileReaderService fileReaderService;
 
     public static void main(String[] args) {
         Images2GpxJCommanderClient c = new Images2GpxJCommanderClient();
@@ -36,7 +36,7 @@ public class Images2GpxJCommanderClient {
         System.out.println(String.format("Writing to %s", this.filepath));
 
         // read files and metadata
-        List<File> allImageFiles = fileReaderService.readFiles(this.imageDirectory);
+        List<File> allImageFiles = fileReaderService.readFiles(this.imageDirectory, false);
         System.out.println(String.format("%s Files :", allImageFiles.size()));
         allImageFiles.forEach(f -> System.out.println(String.format("\t-%s", f.getAbsoluteFile())));
 

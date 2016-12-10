@@ -7,18 +7,7 @@ import com.drew.metadata.exif.GpsDirectory;
 
 import java.util.Collection;
 
-public class MetadataReaderService {
-
-    private static MetadataReaderService instance;
-
-    private MetadataReaderService() {}
-
-    public static MetadataReaderService getInstance() {
-        if (instance == null) {
-            instance = new MetadataReaderService();
-        }
-        return instance;
-    }
+public class MetadataReaderService implements MetadataReader{
 
     public GeoLocation getGeolocation(Metadata metadata) {
         GeoLocation geoLocation = null;

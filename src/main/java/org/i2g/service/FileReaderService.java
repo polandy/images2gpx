@@ -5,25 +5,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FileReaderService {
+public class FileReaderService implements FileReader {
 
-    private static FileReaderService instance;
-
-    private FileReaderService() {
-    }
-
-    public static FileReaderService getInstance() {
-        if (instance == null) {
-            instance = new FileReaderService();
-        }
-        return instance;
-    }
-
-    public List<File> readFiles(String inputDirectory) {
-        return readFiles(inputDirectory, false);
-    }
-
-    private List<File> readFiles(String inputDirectory, boolean isRecursive) {
+    @Override
+    public List<File> readFiles(String inputDirectory, boolean isRecursive) {
         List<File> imageFiles = new ArrayList<>();
         File folder = new File(inputDirectory);
         return getAllImages(folder, imageFiles, isRecursive);
