@@ -3,7 +3,9 @@ package org.i2g.client;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import org.apache.commons.lang3.StringUtils;
-import org.i2g.service.FileReaderService;
+import org.i2g.model.I2GContainer;
+import org.i2g.service.FileReader;
+import org.i2g.service.MetadataReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -23,7 +25,10 @@ public class Images2GpxCommandLineRunner implements CommandLineRunner {
     String outputDirectory;
 
     @Autowired
-    private FileReaderService fileReaderService;
+    private FileReader fileReaderService;
+
+    @Autowired
+    private MetadataReader metadataReaderService;
 
     public void run(String[] args) {
         Images2GpxCommandLineRunner argsContainer = new Images2GpxCommandLineRunner();
@@ -39,6 +44,10 @@ public class Images2GpxCommandLineRunner implements CommandLineRunner {
         List<File> allImageFiles = fileReaderService.readFiles(argsContainer.inputDirectory, false);
         System.out.println(String.format("%s Files :", allImageFiles.size()));
         allImageFiles.forEach(f -> System.out.println(String.format("\t-%s", f.getAbsoluteFile())));
+        List<I2GContainer> containers = metadataReaderService.getI2GContainers(allImageFiles);
+        System.out.println(containers);
+        containers.forEach(img -> System.out.println(String.format("%s -> (%s, %s)", img.getImagefile().getName(), img.getLocation().getLatitude(), img.getLocation().getLongitude())));
+
 
         // write coordinates to file
         // writer.write(fileLocationMapping, InputStream);
