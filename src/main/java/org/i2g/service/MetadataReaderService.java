@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class MetadataReaderService implements MetadataReader{
@@ -40,20 +42,21 @@ public class MetadataReaderService implements MetadataReader{
         return photoLocations;
     }
 
-    public GeoLocation getGeolocation(Metadata metadata) {
-        GeoLocation geoLocation = null;
-        Collection<GpsDirectory> gpsDirectories = metadata.getDirectoriesOfType(GpsDirectory.class);
-        if (gpsDirectories == null)
-            return null;
+	public GeoLocation getGeolocation(Metadata metadata)
+	{
+		return Optional.ofNullable(metadata.getDirectoriesOfType(GpsDirectory.class))
+				.map(gpsDirs -> nonZeroGeoLocation(gpsDirs))
+				.orElse(null);
+	}
 
-        for (GpsDirectory gpsDirectory : gpsDirectories) {
-            geoLocation = gpsDirectory.getGeoLocation();
-
-            if (geoLocation != null && !geoLocation.isZero()) {
-                return geoLocation;
-            }
-        }
-        return geoLocation;
-    }
+	private GeoLocation nonZeroGeoLocation(
+			Collection<GpsDirectory> gpsDirectories)
+	{
+		return gpsDirectories.stream()
+				.map(gpsDir -> gpsDir.getGeoLocation())
+				.filter(Objects::nonNull)
+				.filter(geoLoc -> !geoLoc.isZero())
+				.findFirst().orElse(null);
+	}
 
 }
