@@ -19,15 +19,14 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Service
-public class MetadataReaderService implements MetadataReader{
+public class MetadataReaderService implements MetadataReader {
 
     @Override
     public List<I2GContainer> getI2GContainers(List<File> imageFiles) {
         List<I2GContainer> photoLocations = new ArrayList<>();
         for (File file : imageFiles) {
-            Metadata metadata;
             try {
-                metadata = ImageMetadataReader.readMetadata(file);
+                Metadata metadata = ImageMetadataReader.readMetadata(file);
                 GeoLocation geoLocation = getGeolocation(metadata);
                 // LocalDateTime captureDate = getCaptureDate(metadata);
                 // Integer gpsAltitude = getGpsAltitude(metadata);
@@ -35,28 +34,27 @@ public class MetadataReaderService implements MetadataReader{
                 if (ObjectUtils.allNotNull(geoLocation)) {
                     photoLocations.add(new I2GContainer(file, geoLocation));
                 }
-            } catch (ImageProcessingException | IOException e) {
+            } catch (ImageProcessingException e) {
+                System.out.println(String.format("Could not read img %s\n Reason:%s", file.getAbsolutePath(), e.getMessage()));
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
         return photoLocations;
     }
 
-	public GeoLocation getGeolocation(Metadata metadata)
-	{
-		return Optional.ofNullable(metadata.getDirectoriesOfType(GpsDirectory.class))
-				.map(gpsDirs -> nonZeroGeoLocation(gpsDirs))
-				.orElse(null);
-	}
+    public GeoLocation getGeolocation(Metadata metadata) {
+        return Optional.ofNullable(metadata.getDirectoriesOfType(GpsDirectory.class))
+                .map(gpsDirs -> nonZeroGeoLocation(gpsDirs))
+                .orElse(null);
+    }
 
-	private GeoLocation nonZeroGeoLocation(
-			Collection<GpsDirectory> gpsDirectories)
-	{
-		return gpsDirectories.stream()
-				.map(gpsDir -> gpsDir.getGeoLocation())
-				.filter(Objects::nonNull)
-				.filter(geoLoc -> !geoLoc.isZero())
-				.findFirst().orElse(null);
-	}
+    private GeoLocation nonZeroGeoLocation(Collection<GpsDirectory> gpsDirectories) {
+        return gpsDirectories.stream()
+                .map(gpsDir -> gpsDir.getGeoLocation())
+                .filter(Objects::nonNull)
+                .filter(geoLoc -> !geoLoc.isZero())
+                .findFirst().orElse(null);
+    }
 
 }
