@@ -6,12 +6,15 @@ import org.apache.commons.lang3.StringUtils;
 import org.i2g.model.I2GContainer;
 import org.i2g.service.FileReader;
 import org.i2g.service.MetadataReader;
+import org.i2g.service.writers.FileWriter;
+import org.i2g.service.writers.OutputType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.util.List;
+import java.util.Map;
 
 @Component
 public class Images2GpxCommandLineRunner implements CommandLineRunner {
@@ -24,11 +27,21 @@ public class Images2GpxCommandLineRunner implements CommandLineRunner {
     private
     String outputDirectory;
 
+
     @Autowired
     private FileReader fileReaderService;
 
     @Autowired
     private MetadataReader metadataReaderService;
+
+    @Autowired
+    private Map<OutputType, FileWriter> writerRegistry;
+
+    public Images2GpxCommandLineRunner(Map<OutputType, FileWriter> writerRegistry) {
+        this.writerRegistry = writerRegistry;
+    }
+
+    private Images2GpxCommandLineRunner() {}
 
     public void run(String[] args) {
         Images2GpxCommandLineRunner argsContainer = new Images2GpxCommandLineRunner();
@@ -48,8 +61,8 @@ public class Images2GpxCommandLineRunner implements CommandLineRunner {
         System.out.println(containers);
         containers.forEach(img -> System.out.println(String.format("%s -> (%s, %s)", img.getImagefile().getName(), img.getLocation().getLatitude(), img.getLocation().getLongitude())));
 
-
         // write coordinates to file
-        // writer.write(fileLocationMapping, InputStream);
+        FileWriter writer = writerRegistry.get(OutputType.GPX);
+        writer.write(containers, outputFilePath);
     }
 }
