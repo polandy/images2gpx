@@ -26,6 +26,10 @@ public class Application {
     @Qualifier("googleMapsMarkersWriter")
     private FileWriter googleMapsMarkersWriter;
 
+    @Autowired
+    @Qualifier("googleMapsPolylinesWriter")
+    private FileWriter googleMapsPolylinesWriter;
+
 
     @Bean
     public Images2GpxCommandLineRunner getImages2GpxCommandLineRunner() {
@@ -37,6 +41,7 @@ public class Application {
         HashMap<OutputType, FileWriter> writers = new HashMap<>();
         writers.put(OutputType.GPX, gpxFileWriterService);
         writers.put(OutputType.GOOGLE_MAPS_MARKERS, googleMapsMarkersWriter);
+        writers.put(OutputType.GOOGLE_MAPS_POLYLINES, googleMapsPolylinesWriter);
         return writers;
     }
 }

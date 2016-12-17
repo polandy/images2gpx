@@ -5,7 +5,8 @@ import java.util.List;
 
 public enum OutputType {
     GPX("gpx"),
-    GOOGLE_MAPS_MARKERS("google-maps-markers");
+    GOOGLE_MAPS_MARKERS("google-maps-markers"),
+    GOOGLE_MAPS_POLYLINES("google-maps-polylines");
 
     String value;
 
