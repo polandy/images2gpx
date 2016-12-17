@@ -55,11 +55,11 @@ public class Images2GpxCommandLineRunner implements CommandLineRunner {
 
         // read files and metadata
         List<File> allImageFiles = fileReaderService.readFiles(argsContainer.inputDirectory, false);
-        System.out.println(String.format("%s Files :", allImageFiles.size()));
-        allImageFiles.forEach(f -> System.out.println(String.format("\t-%s", f.getAbsoluteFile())));
+        // System.out.println(String.format("%s Files :", allImageFiles.size()));
+        // allImageFiles.forEach(f -> System.out.println(String.format("\t-%s", f.getAbsoluteFile())));
         List<I2GContainer> containers = metadataReaderService.getI2GContainers(allImageFiles);
         System.out.println(containers);
-        containers.forEach(img -> System.out.println(String.format("%s -> (%s, %s)", img.getImagefile().getName(), img.getLocation().getLatitude(), img.getLocation().getLongitude())));
+        // containers.forEach(img -> System.out.println(String.format("%s -> (%s, %s)", img.getImagefile().getName(), img.getLocation().getLatitude(), img.getLocation().getLongitude())));
 
         // write coordinates to file
         FileWriter writer = writerRegistry.get(OutputType.GPX);
