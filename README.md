@@ -13,6 +13,7 @@ parameters:(
   -i, --inputDirectory        Directory containing your images (required)
   -o, --outputDirectory       Output Directory (default: your userhome)
   -t, --outputType            supported types [gpx] (default: gpx)
+)
 ```
 ## build
 A Java 8 Development Kit is required to build the project.
