@@ -43,15 +43,17 @@ public class GpxFileWriterService implements FileWriter, ResourceLoaderAware {
             JAXBElement<GpxType> gpxElement = new ObjectFactory().createGpx(getGpxType(fileLocationMapping));
 
         Marshaller jaxbMarshaller;
+        File file = new File(outputFilePath);
         try {
             jaxbMarshaller = jaxbContext.createMarshaller();
             jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-            File file = new File(outputFilePath);
             jaxbMarshaller.marshal(gpxElement, file);
             validateXml(file);
             System.out.println("XML has been written successfully: " + file.getAbsoluteFile());
         } catch (JAXBException e) {
-            // could not create marshaller / unmarshaller
+            // could not create marshaller / unmarshaller, invalid xml
+            System.out.println("Invalid xml, could not generate gpx file");
+            file.delete();
             e.printStackTrace();
         } catch (IOException e) {
             // could not read resource (schema not found)
@@ -65,11 +67,11 @@ public class GpxFileWriterService implements FileWriter, ResourceLoaderAware {
     private void validateXml(File xmlFile) throws JAXBException, IOException, SAXException {
         SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
         Unmarshaller unmarshaller = this.jaxbContext.createUnmarshaller();
-            File xsdFile = resourceLoader.getResource("classpath:/xsd/gpx.xsd").getFile();
-            Schema gpxSchema =  sf.newSchema(xsdFile);
-            unmarshaller.setEventHandler(new GpxValidationEventHandler());
-            unmarshaller.setSchema(gpxSchema);
-            unmarshaller.unmarshal(xmlFile);
+        File xsdFile = resourceLoader.getResource("classpath:/xsd/gpx.xsd").getFile();
+        Schema gpxSchema =  sf.newSchema(xsdFile);
+        unmarshaller.setEventHandler(new GpxValidationEventHandler());
+        unmarshaller.setSchema(gpxSchema);
+        unmarshaller.unmarshal(xmlFile);
     }
 
     private GpxType getGpxType(List<I2GContainer> fileLocationMapping) {
