@@ -50,6 +50,7 @@ public class GpxFileWriterService implements FileWriter, ResourceLoaderAware {
             File file = new File(outputFilePath);
 
             jaxbMarshaller.marshal(gpxElement, file);
+//            jaxbMarshaller.marshal(gpxElement, System.out);
 
             validateXml(file);
 
@@ -76,7 +77,8 @@ public class GpxFileWriterService implements FileWriter, ResourceLoaderAware {
 
         GpxType gpxType = new GpxType();
         gpxType.setMetadata(getMetadataType());
-        gpxType.setCreator("Images2Gpx");
+        gpxType.setCreator(PROJECT_NAME);
+        gpxType.setVersion(GPX_SCHEMA_VERSION);
 
         TrkType track = new TrkType();
         TrksegType trackSegment = new TrksegType();
