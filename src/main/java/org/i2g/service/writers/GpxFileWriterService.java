@@ -1,9 +1,11 @@
 package org.i2g.service.writers;
 
 
+import org.apache.commons.io.FileUtils;
 import org.i2g.jaxb.types.*;
 import org.i2g.model.I2GContainer;
 import org.springframework.context.ResourceLoaderAware;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 import org.xml.sax.SAXException;
@@ -18,6 +20,7 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,9 +45,8 @@ public class GpxFileWriterService implements FileWriter, ResourceLoaderAware {
     }
 
     @Override
-    public void write(List<I2GContainer> fileLocationMapping, String outputFilePath) {
-            JAXBElement<GpxType> gpxElement = new ObjectFactory().createGpx(getGpxType(fileLocationMapping));
-
+    public void write(List<I2GContainer> containers, String outputFilePath) {
+        JAXBElement<GpxType> gpxElement = new ObjectFactory().createGpx(getGpxType(containers));
         Marshaller jaxbMarshaller;
         File file = new File(outputFilePath);
         try {
@@ -70,12 +72,21 @@ public class GpxFileWriterService implements FileWriter, ResourceLoaderAware {
     private void validateXml(File xmlFile) throws JAXBException, IOException, SAXException {
         SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
         Unmarshaller unmarshaller = this.jaxbContext.createUnmarshaller();
-        File xsdFile = resourceLoader.getResource("classpath:/xsd/gpx.xsd").getFile();
-        Schema gpxSchema =  sf.newSchema(xsdFile);
+        Schema gpxSchema = sf.newSchema(getGpxSchemaFile());
         unmarshaller.setEventHandler(new GpxValidationEventHandler());
         unmarshaller.setSchema(gpxSchema);
         unmarshaller.unmarshal(xmlFile);
     }
+
+    private File getGpxSchemaFile() throws IOException {
+        // copy xsd to from inputStream to temporary file for standalone jar
+        ClassPathResource resource = new ClassPathResource("xsd/gpx.xsd");
+        InputStream xsdFileStream = resource.getInputStream();
+        File copiedXsd = File.createTempFile("tmp__gpx", ".xsd");
+        FileUtils.copyInputStreamToFile(xsdFileStream, copiedXsd);
+        return copiedXsd;
+    }
+
 
     private GpxType getGpxType(List<I2GContainer> fileLocationMapping) {
 
@@ -93,12 +104,10 @@ public class GpxFileWriterService implements FileWriter, ResourceLoaderAware {
         return gpxType;
     }
 
-    protected List<WptType> getWaypointTypes(List<I2GContainer> fileLocationMapping) {
+    private List<WptType> getWaypointTypes(List<I2GContainer> fileLocationMapping) {
         List<WptType> trackPoints = new ArrayList<>();
         fileLocationMapping.stream()
-                .forEach(container ->
-                        trackPoints.add(getWaypointType(container))
-                );
+                .forEach(container -> trackPoints.add(getWaypointType(container)));
         return trackPoints;
     }
 
