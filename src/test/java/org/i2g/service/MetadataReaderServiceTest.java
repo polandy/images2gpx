@@ -1,9 +1,10 @@
+package org.i2g.service;
+
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
 import com.drew.lang.GeoLocation;
 import com.drew.metadata.Metadata;
 import org.hamcrest.CoreMatchers;
-import org.i2g.service.MetadataReaderService;
 import org.junit.Assert;
 import org.junit.Test;
 
