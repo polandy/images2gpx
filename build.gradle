@@ -12,15 +12,15 @@ buildscript {
         classpath("com.github.jacobono:gradle-jaxb-plugin:${jacobonoVersion}")
     }
 }
-
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'com.github.jacobono.jaxb'
+
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 sourceSets {
     main {
@@ -46,6 +46,8 @@ dependencies {
     jaxb 'com.sun.xml.bind:jaxb-impl:2.2.7-b41'
     jaxb 'javax.xml.bind:jaxb-api:2.2.7'
 
+    compile "org.projectlombok:lombok:1.16.12"
+    
     compile "com.beust:jcommander:1.48"
     compile 'org.apache.commons:commons-lang3:3.5'
     compile 'com.drewnoakes:metadata-extractor:2.9.1'

@@ -11,6 +11,9 @@ import org.xml.sax.SAXException;
 import javax.annotation.PostConstruct;
 import javax.xml.XMLConstants;
 import javax.xml.bind.*;
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import java.io.File;
@@ -90,11 +93,11 @@ public class GpxFileWriterService implements FileWriter, ResourceLoaderAware {
         return gpxType;
     }
 
-    private List<WptType> getWaypointTypes(List<I2GContainer> fileLocationMapping) {
+    protected List<WptType> getWaypointTypes(List<I2GContainer> fileLocationMapping) {
         List<WptType> trackPoints = new ArrayList<>();
-        fileLocationMapping.stream().map(I2GContainer::getLocation)
-                .forEach(location ->
-                        trackPoints.add(getWaypointType(location.getLatitude(), location.getLongitude()))
+        fileLocationMapping.stream()
+                .forEach(container ->
+                        trackPoints.add(getWaypointType(container))
                 );
         return trackPoints;
     }
@@ -113,10 +116,21 @@ public class GpxFileWriterService implements FileWriter, ResourceLoaderAware {
         return personType;
     }
 
-    private WptType getWaypointType(double latitude, double longitude) {
+    protected WptType getWaypointType(I2GContainer container) {
         WptType waypoint = new WptType();
-        waypoint.setLat(BigDecimal.valueOf(latitude));
-        waypoint.setLon(BigDecimal.valueOf(longitude));
+        waypoint.setLat(BigDecimal.valueOf(container.getLocation().getLatitude()));
+        waypoint.setLon(BigDecimal.valueOf(container.getLocation().getLongitude()));
+        waypoint = addCaptureDateToWaypoint(waypoint , container);
+        return waypoint;
+    }
+
+    private WptType addCaptureDateToWaypoint(WptType waypoint, I2GContainer container) {
+        try {
+            XMLGregorianCalendar cal = DatatypeFactory.newInstance().newXMLGregorianCalendar(container.getCaptureDate().toString());
+            waypoint.setTime(cal);
+        } catch (DatatypeConfigurationException e) {
+            // TODO log the error
+        }
         return waypoint;
     }
 
