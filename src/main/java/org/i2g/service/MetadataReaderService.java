@@ -31,7 +31,7 @@ public class MetadataReaderService implements MetadataReader {
                 // Integer gpsAltitude = getGpsAltitude(metadata);
 
                 if (ObjectUtils.allNotNull(geoLocation, captureDate)) {
-                    photoLocations.add(new I2GContainer(file, geoLocation, captureDate));
+                    photoLocations.add(new I2GContainer(file, captureDate, geoLocation));
                 }
             } catch (ImageProcessingException e) {
                 System.out.println(String.format("Could not read img %s\n Reason:%s", file.getAbsolutePath(), e.getMessage()));
