@@ -5,5 +5,5 @@ import java.util.List;
 
 public interface FileReader {
 
-    List<File> readFiles(String inputDirectory, boolean isRecursive);
+    List<File> readFiles(File inputDirectory, boolean isRecursive);
 }

@@ -11,10 +11,9 @@ import java.util.List;
 public class FileReaderService implements FileReader {
 
     @Override
-    public List<File> readFiles(String inputDirectory, boolean isRecursive) {
+    public List<File> readFiles(File inputDirectory, boolean isRecursive) {
         List<File> imageFiles = new ArrayList<>();
-        File folder = new File(inputDirectory);
-        return getAllImages(folder, imageFiles, isRecursive);
+        return getAllImages(inputDirectory, imageFiles, isRecursive);
     }
 
     private List<File> getAllImages(File inputDirectory, List<File> imageFiles, boolean isRecursive) {

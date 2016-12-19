@@ -3,6 +3,7 @@ package org.i2g.client;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import org.apache.commons.lang3.StringUtils;
+import org.i2g.client.argument.converter.FileConverter;
 import org.i2g.client.argument.converter.OutputTypeConverter;
 import org.i2g.client.argument.validator.OutputTypeValidator;
 import org.i2g.model.I2GContainer;
@@ -21,8 +22,10 @@ import java.util.Map;
 @Component
 public class Images2GpxCommandLineRunner implements CommandLineRunner {
 
-    @Parameter(names = {"-i", "--inputDirectory"}, description = "Directory containing your images", required = true)
-    private String inputDirectory;
+    @Parameter(names = {"-i", "--inputDirectory"},
+            converter = FileConverter.class,
+            description = "Directory containing your images", required = true)
+    private File inputDirectory;
 
     @Parameter(names = {"-o", "--outputDirectory"}, description = "Output directory")
     private String outputDirectory;
