@@ -2,7 +2,10 @@ package org.i2g.client;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
-import org.apache.commons.lang3.StringUtils;
+import org.i2g.client.argument.converter.FileConverter;
+import org.i2g.client.argument.converter.OutputTypeConverter;
+import org.i2g.client.argument.validator.OutputDirectoryValidator;
+import org.i2g.client.argument.validator.OutputTypeValidator;
 import org.i2g.model.I2GContainer;
 import org.i2g.service.FileReader;
 import org.i2g.service.MetadataReader;
@@ -19,14 +22,23 @@ import java.util.Map;
 @Component
 public class Images2GpxCommandLineRunner implements CommandLineRunner {
 
-    @Parameter(names = {"-i", "--inputDirectory"}, description = "Directory containing your images", required = true)
-    private
-    String inputDirectory;
+    @Parameter(names = {"-i", "--inputDirectory"},
+            converter = FileConverter.class,
+            description = "Directory containing your images", required = true)
+    private File inputDirectory;
 
-    @Parameter(names = {"-o", "--outputDirectory"}, description = "Output directory")
-    private
-    String outputDirectory;
+    @Parameter(names = {"-o", "--outputDirectory"},
+            validateWith = OutputDirectoryValidator.class,
+            converter = FileConverter.class,
+            description = "Output directory")
+    private File outputDirectory = new File(System.getProperty("user.dir"));
 
+    @Parameter(names = {"-t", "outputType"},
+            validateWith = OutputTypeValidator.class,
+            converter = OutputTypeConverter.class,
+            description = "Default: gpx, possible values:\n" +
+                    "\tgpx\ta gpx file")
+    private OutputType outputType = OutputType.GPX;
 
     @Autowired
     private FileReader fileReaderService;
@@ -47,22 +59,17 @@ public class Images2GpxCommandLineRunner implements CommandLineRunner {
         Images2GpxCommandLineRunner argsContainer = new Images2GpxCommandLineRunner();
         new JCommander(argsContainer, args);
 
-        argsContainer.outputDirectory = StringUtils.isEmpty(argsContainer.outputDirectory) ? System.getProperty("user.dir") : argsContainer.outputDirectory;
         String outputFilePath = String.format("%s/%s", argsContainer.outputDirectory, "output.gpx");
 
         System.out.println(String.format("Processing all files in directory \"%s\"", argsContainer.inputDirectory));
         System.out.println(String.format("Writing to %s", outputFilePath));
 
-        // read files and metadata
         List<File> allImageFiles = fileReaderService.readFiles(argsContainer.inputDirectory, false);
-        // System.out.println(String.format("%s Files :", allImageFiles.size()));
-        // allImageFiles.forEach(f -> System.out.println(String.format("\t-%s", f.getAbsoluteFile())));
         List<I2GContainer> containers = metadataReaderService.getI2GContainers(allImageFiles);
         System.out.println(containers);
-        // containers.forEach(img -> System.out.println(String.format("%s -> (%s, %s)", img.getImagefile().getName(), img.getLocation().getLatitude(), img.getLocation().getLongitude())));
 
         // write coordinates to file
-        FileWriter writer = writerRegistry.get(OutputType.GPX);
+        FileWriter writer = writerRegistry.get(argsContainer.outputType);
         writer.write(containers, outputFilePath);
     }
 }
