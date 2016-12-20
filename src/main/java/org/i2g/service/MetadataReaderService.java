@@ -45,10 +45,10 @@ public class MetadataReaderService implements MetadataReader {
     @Override
     public LocalDateTime getCaptureDate(Metadata metadata) {
         return metadata.getDirectoriesOfType(ExifSubIFDDirectory.class).stream()
-                .map(exifSubIFDDirectories -> exifSubIFDDirectories.getDateOriginal())
+                .map(ExifSubIFDDirectory::getDateOriginal)
                 .filter(Objects::nonNull)
                 .findFirst()
-                .map(captureDate -> toLocalDateTime(captureDate))
+                .map(this::toLocalDateTime)
                 .orElse(null);
     }
 
@@ -59,13 +59,13 @@ public class MetadataReaderService implements MetadataReader {
 
     public GeoLocation getGeolocation(Metadata metadata) {
         return Optional.ofNullable(metadata.getDirectoriesOfType(GpsDirectory.class))
-                .map(gpsDirs -> nonZeroGeoLocation(gpsDirs))
+                .map(this::nonZeroGeoLocation)
                 .orElse(null);
     }
 
     private GeoLocation nonZeroGeoLocation(Collection<GpsDirectory> gpsDirectories) {
         return gpsDirectories.stream()
-                .map(gpsDir -> gpsDir.getGeoLocation())
+                .map(GpsDirectory::getGeoLocation)
                 .filter(Objects::nonNull)
                 .filter(geoLoc -> !geoLoc.isZero())
                 .findFirst().orElse(null);
