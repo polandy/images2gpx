@@ -5,6 +5,7 @@ import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
 import com.drew.lang.GeoLocation;
 import com.drew.metadata.Metadata;
+import com.drew.metadata.Tag;
 import com.drew.metadata.exif.ExifSubIFDDirectory;
 import com.drew.metadata.exif.GpsDirectory;
 import org.apache.commons.lang3.ObjectUtils;
@@ -44,6 +45,15 @@ public class MetadataReaderService implements MetadataReader {
 
     @Override
     public Integer getGpsAltitude(Metadata metadata) {
+        String gpsAltitudeTagName = "GPS Altitude";
+        for (GpsDirectory directory : metadata.getDirectoriesOfType(GpsDirectory.class)) {
+            Optional<Tag> tag = directory.getTags().stream()
+                    .filter(x -> x.getTagName().equals(gpsAltitudeTagName))
+                    .findFirst();
+            if (tag.isPresent()) {
+                return Integer.valueOf(tag.get().getDescription().replaceAll("[^0-9]+", ""));
+            }
+        }
         return null;
     }
 
