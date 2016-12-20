@@ -14,5 +14,7 @@ public interface MetadataReader {
 
     GeoLocation getGeolocation(Metadata metadata);
 
+    Integer getGpsAltitude(Metadata metadata);
+
     LocalDateTime getCaptureDate(Metadata metadata);
 }

@@ -43,6 +43,11 @@ public class MetadataReaderService implements MetadataReader {
     }
 
     @Override
+    public Integer getGpsAltitude(Metadata metadata) {
+        return null;
+    }
+
+    @Override
     public LocalDateTime getCaptureDate(Metadata metadata) {
         return metadata.getDirectoriesOfType(ExifSubIFDDirectory.class).stream()
                 .map(ExifSubIFDDirectory::getDateOriginal)
