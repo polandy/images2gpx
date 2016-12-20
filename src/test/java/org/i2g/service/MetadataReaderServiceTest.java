@@ -16,11 +16,13 @@ import static org.hamcrest.core.Is.is;
 
 public class MetadataReaderServiceTest {
 
-    MetadataReaderService service = new MetadataReaderService();
+    MetadataReader service = new MetadataReaderService();
     private static final Double TOLERANCE = 0.01;
 
     private static final String IMAGE_WITH_GPS_DATA_PATH = "/images/image_with_gps_data.jpg";
     private static final String IMAGE_WITHOUT_GPS_DATA_PATH = "/images/image_without_gps_data.jpg";
+    private static final String IMAGE_WITH_GPS_ALTITUDE_PATH = "/images/image_with_gps_altitude.jpg";
+    private static final String IMAGE_WITHOUT_GPS_ALTITUDE_PATH = "/images/image_without_gps_altitude.jpg";
     private static final String IMAGE_WITH_CAPTURE_DATE_PATH = "/images/image_with_capture_date.jpg";
     private static final String IMAGE_WITHOUT_CAPTURE_DATE_PATH = "/images/image_without_capture_date.jpg";
 
@@ -44,6 +46,26 @@ public class MetadataReaderServiceTest {
         GeoLocation geolocation = service.getGeolocation(metadata);
         // then
         Assert.assertNull(geolocation);
+    }
+
+    @Test
+    public void shouldReadCorrectGpsAltitude() throws ImageProcessingException, IOException {
+        // given
+        Metadata metadata = readMetadata(IMAGE_WITH_GPS_ALTITUDE_PATH);
+        // when
+        Integer gpsAltitude = service.getGpsAltitude(metadata);
+        // then
+        Assert.assertThat(gpsAltitude, is(630));
+    }
+
+    @Test
+    public void shouldHandleImageWithoutGpsAltitude() throws ImageProcessingException, IOException {
+        // given
+        Metadata metadata = readMetadata(IMAGE_WITHOUT_GPS_ALTITUDE_PATH);
+        // when
+        Integer gpsAltitude = service.getGpsAltitude(metadata);
+        // then
+        Assert.assertThat(gpsAltitude, is(CoreMatchers.nullValue()));
     }
 
     @Test

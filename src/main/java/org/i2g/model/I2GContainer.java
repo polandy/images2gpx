@@ -16,4 +16,5 @@ public class I2GContainer {
     private File imagefile;
     private LocalDateTime captureDate;
     private GeoLocation location;
+    private Integer gpsAltitude;
 }
