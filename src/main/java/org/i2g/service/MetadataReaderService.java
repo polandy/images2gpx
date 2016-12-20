@@ -29,10 +29,10 @@ public class MetadataReaderService implements MetadataReader {
                 Metadata metadata = ImageMetadataReader.readMetadata(file);
                 GeoLocation geoLocation = getGeolocation(metadata);
                 LocalDateTime captureDate = getCaptureDate(metadata);
-                // Integer gpsAltitude = getGpsAltitude(metadata);
+                Integer gpsAltitude = getGpsAltitude(metadata);
 
                 if (ObjectUtils.allNotNull(geoLocation, captureDate)) {
-                    photoLocations.add(new I2GContainer(file, captureDate, geoLocation));
+                    photoLocations.add(new I2GContainer(file, captureDate, geoLocation, gpsAltitude));
                 }
             } catch (ImageProcessingException e) {
                 System.out.println(String.format("Could not read img %s\n Reason:%s", file.getAbsolutePath(), e.getMessage()));

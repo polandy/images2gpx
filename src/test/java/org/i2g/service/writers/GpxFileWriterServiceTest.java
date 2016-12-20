@@ -34,7 +34,7 @@ public class GpxFileWriterServiceTest  {
         XMLGregorianCalendar cal = DatatypeFactory.newInstance().newXMLGregorianCalendar(now.toString());
 
         GeoLocation loc = new GeoLocation(1d,2d);
-        I2GContainer c = new I2GContainer(null, now, loc);
+        I2GContainer c = new I2GContainer(null, now, loc, null);
         WptType waypoint = service.getWaypointType(c);
 
         Assert.assertThat(waypoint.getTime(), is(cal));
