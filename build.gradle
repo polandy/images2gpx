@@ -34,6 +34,16 @@ sourceSets {
 jar {
     baseName = 'images2gpx'
     version =  '0.1.0'
+    manifest {
+        attributes 'Implementation-Title': baseName,
+                'Implementation-Version': version,
+                'Main-Class': 'org.i2g.Application'
+    }
+}
+
+bootRun {
+    group = ""
+    description 'this task is not working. Build a runnable jar with the bootRepackage task and execute the jar.'
 }
 
 repositories {
@@ -47,7 +57,8 @@ dependencies {
     jaxb 'javax.xml.bind:jaxb-api:2.2.7'
 
     compile "org.projectlombok:lombok:1.16.12"
-    
+
+    compile "commons-io:commons-io:2.4"
     compile "com.beust:jcommander:1.48"
     compile 'org.apache.commons:commons-lang3:3.5'
     compile 'com.drewnoakes:metadata-extractor:2.9.1'
