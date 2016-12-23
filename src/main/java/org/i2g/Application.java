@@ -22,6 +22,11 @@ public class Application {
     @Qualifier("gpxFileWriter")
     private FileWriter gpxFileWriterService;
 
+    @Autowired
+    @Qualifier("googleMapsMarkersWriter")
+    private FileWriter googleMapsMarkersWriter;
+
+
     @Bean
     public Images2GpxCommandLineRunner getImages2GpxCommandLineRunner() {
         return new Images2GpxCommandLineRunner(getWriterRegistry());
@@ -31,6 +36,7 @@ public class Application {
     public HashMap<OutputType, FileWriter> getWriterRegistry() {
         HashMap<OutputType, FileWriter> writers = new HashMap<>();
         writers.put(OutputType.GPX, gpxFileWriterService);
+        writers.put(OutputType.GOOGLE_MAPS_MARKERS, googleMapsMarkersWriter);
         return writers;
     }
 }
