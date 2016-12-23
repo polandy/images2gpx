@@ -4,8 +4,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public enum OutputType {
-    GPX("gpx");
-//    GOOGLE_MAPS("googlemaps");
+    GPX("gpx"),
+    GOOGLE_MAPS_MARKERS("google-maps-markers");
 
     String value;
 
