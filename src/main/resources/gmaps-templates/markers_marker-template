@@ -1,0 +1,5 @@
+            marker = new google.maps.Marker({
+                position:new google.maps.LatLng({{ LAT }}, {{ LONG }}),
+                map:map,
+                title:"{{ TITLE }}"});
+            google.maps.event.addListener(marker, 'click', function() { document.location = "{{ LOCATION }}"; });
