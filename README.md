@@ -1,7 +1,7 @@
 # images2gpx
 
 ```
-images2gpx is a command line tool which creates a gpx file based on gps data in jpeg images.
+images2gpx is a command line tool which creates a gpx or html files based on gps data in jpeg images.
 
 Usage:
   java -jar images2gpx.jar [parameters]
@@ -12,7 +12,7 @@ Usage:
 parameters:(
   -i, --inputDirectory        Directory containing your images (required)
   -o, --outputDirectory       Output Directory (default: your userhome)
-  -t, --outputType            supported types [gpx] (default: gpx)
+  -t, --outputType            supported types [gpx, google-maps-markers] (default: gpx)
 )
 ```
 ## build
