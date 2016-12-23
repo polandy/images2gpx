@@ -59,7 +59,7 @@ public class Images2GpxCommandLineRunner implements CommandLineRunner {
         Images2GpxCommandLineRunner argsContainer = new Images2GpxCommandLineRunner();
         new JCommander(argsContainer, args);
 
-        String outputFilePath = String.format("%s/%s", argsContainer.outputDirectory, "output.gpx");
+        String outputFilePath = String.format("%s", argsContainer.outputDirectory);
 
         System.out.println(String.format("Processing all files in directory \"%s\"", argsContainer.inputDirectory));
         System.out.println(String.format("Writing to %s", outputFilePath));
