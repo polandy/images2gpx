@@ -48,7 +48,7 @@ public class GpxFileWriterService implements FileWriter, ResourceLoaderAware {
     public void write(List<I2GContainer> containers, String outputFilePath) {
         JAXBElement<GpxType> gpxElement = new ObjectFactory().createGpx(getGpxType(containers));
         Marshaller jaxbMarshaller;
-        File file = new File(outputFilePath);
+        File file = new File(String.format("%s/images2gpx-route.gpx", outputFilePath));
         try {
             jaxbMarshaller = jaxbContext.createMarshaller();
             jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);

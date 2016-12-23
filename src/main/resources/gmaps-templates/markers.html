@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <style>html,body{height:100%;margin:0;padding:0;}#map_canvas{height:100%;}</style>
+    <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+    <script>
+        function initialise() {
+            var options = { zoom:2, mapTypeId:google.maps.MapTypeId.ROADMAP, center:new google.maps.LatLng(0.0, 0.0)};
+            var map = new google.maps.Map(document.getElementById('map_canvas'), options);
+            var marker;
+            {{ MARKERS }}
+
+//            marker = new google.maps.Marker({
+//                position:new google.maps.LatLng(20.710538888888887, 102.67464444444445),
+//                map:map,
+//                title:"/home/apollari/Pictures/tmpgpxroute/IMG_20161017_132311.jpg"});
+//            google.maps.event.addListener(marker, 'click', function() { document.location = "/home/apollari/Pictures/tmpgpxroute/IMG_20161017_132311.jpg"; });
+        }
+    </script>
+</head>
+<body onload="initialise()">
+<div id="map_canvas"></div>
+</body>
+</html>
