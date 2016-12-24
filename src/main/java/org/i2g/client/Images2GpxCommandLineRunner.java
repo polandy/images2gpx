@@ -40,6 +40,11 @@ public class Images2GpxCommandLineRunner implements CommandLineRunner {
                     "\tgpx\ta gpx file")
     private OutputType outputType = OutputType.GPX;
 
+    @Parameter(names = {"-r", "--recursive"},
+            description = "Read the inputDirectory recursively"
+    )
+    private boolean recursive = false;
+
     @Autowired
     private FileReader fileReaderService;
 
@@ -64,7 +69,7 @@ public class Images2GpxCommandLineRunner implements CommandLineRunner {
         System.out.println(String.format("Processing all files in directory \"%s\"", argsContainer.inputDirectory));
         System.out.println(String.format("Writing to %s", outputFilePath));
 
-        List<File> allImageFiles = fileReaderService.readFiles(argsContainer.inputDirectory, false);
+        List<File> allImageFiles = fileReaderService.readFiles(argsContainer.inputDirectory, argsContainer.recursive);
         List<I2GContainer> containers = metadataReaderService.getI2GContainers(allImageFiles);
         System.out.println(containers);
 
