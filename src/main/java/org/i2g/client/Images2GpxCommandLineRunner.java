@@ -71,5 +71,6 @@ public class Images2GpxCommandLineRunner implements CommandLineRunner {
         // write coordinates to file
         FileWriter writer = writerRegistry.get(argsContainer.outputType);
         writer.write(containers, outputFilePath);
+        System.exit(0);
     }
 }
