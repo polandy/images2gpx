@@ -34,13 +34,21 @@ public class GoogleMapsPolylinesWriter extends AbstractTemplateWriter {
 
     @Override
     protected String replacePlaceHolders(String templateContent) {
-        return templateContent
-                .replaceAll(buildPlaceholder(PLACEHOLDER_TITLE), PROJECT_NAME)
-                .replaceAll(buildPlaceholder(PLACEHOLDER_API_KEY), "");
+        return templateContent.replaceAll(buildPlaceholder(PLACEHOLDER_TITLE), PROJECT_NAME);
+    }
+
+    @Override
+    protected String replacePlaceholderFromContext(String templateContent, WriterContext wc) {
+        return templateContent.replaceAll(buildPlaceholder(PLACEHOLDER_API_KEY), wc.getApiKey());
     }
 
     @Override
     protected String getTemplatePath() {
         return TEMPLATE_PATH;
+    }
+
+    @Override
+    protected String getFilename() {
+        return "images2gpx-google-maps-with-polylines.html";
     }
 }

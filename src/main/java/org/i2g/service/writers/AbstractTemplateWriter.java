@@ -16,15 +16,21 @@ public abstract class AbstractTemplateWriter implements FileWriter {
     private static final String PLACEHOLDER_TEMPLATE = "\\{\\{ %s \\}\\}";
 
     @Override
-    public void write(List<I2GContainer> fileLocationMapping, String outputFilePath){
+    public void write(List<I2GContainer> fileLocationMapping, WriterContext wc){
         try {
             String templateContent = getTemplateAsString(getTemplatePath());
             String content = replacePlaceHolders(templateContent);
+            content = replacePlaceholderFromContext(content, wc);
             content = insertCoordinates(content, fileLocationMapping);
-            writeContentToFile(content, outputFilePath);
+            writeContentToFile(content, wc.getOutputDirectory().getAbsolutePath());
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    protected String replacePlaceholderFromContext(String content, WriterContext wc) {
+        // default: do nothing
+        return content;
     }
 
     protected abstract String insertCoordinates(String content, List<I2GContainer> fileLocationMapping) throws IOException;
@@ -32,6 +38,8 @@ public abstract class AbstractTemplateWriter implements FileWriter {
     protected abstract String replacePlaceHolders(String templateContent);
 
     protected abstract String getTemplatePath();
+
+    protected abstract String getFilename();
 
     String getTemplateAsString(String templatePath) throws IOException {
         ClassPathResource resource = new ClassPathResource(templatePath);
@@ -50,7 +58,7 @@ public abstract class AbstractTemplateWriter implements FileWriter {
     }
 
     private void writeContentToFile(String content, String outputFilePath) throws IOException {
-        File outpFile = new File(outputFilePath + "/googlemapspolyline.html");
+        File outpFile = new File(outputFilePath + "/" + getFilename());
         outpFile.createNewFile();
         PrintWriter writer = new PrintWriter(outpFile, "UTF-8");
         writer.println(content);

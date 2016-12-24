@@ -2,6 +2,7 @@ package org.i2g.client;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
+import org.apache.commons.lang3.StringUtils;
 import org.i2g.client.argument.converter.FileConverter;
 import org.i2g.client.argument.converter.OutputTypeConverter;
 import org.i2g.client.argument.validator.OutputDirectoryValidator;
@@ -11,6 +12,7 @@ import org.i2g.service.FileReader;
 import org.i2g.service.MetadataReader;
 import org.i2g.service.writers.FileWriter;
 import org.i2g.service.writers.OutputType;
+import org.i2g.service.writers.WriterContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -37,13 +39,20 @@ public class Images2GpxCommandLineRunner implements CommandLineRunner {
             validateWith = OutputTypeValidator.class,
             converter = OutputTypeConverter.class,
             description = "Default: gpx, possible values:\n" +
-                    "\tgpx\ta gpx file")
+                    "\tgpx\ta gpx file\n" +
+                    "google-maps-markers\n" +
+                    "google-maps-polyline")
     private OutputType outputType = OutputType.GPX;
 
     @Parameter(names = {"-r", "--recursive"},
             description = "Read the inputDirectory recursively"
     )
     private boolean recursive = false;
+
+    @Parameter(names = {"--apikey"},
+            description = "Google Maps API Key. Only used for OutputType google-maps-polyline"
+    )
+    private String apiKey;
 
     @Autowired
     private FileReader fileReaderService;
@@ -61,21 +70,36 @@ public class Images2GpxCommandLineRunner implements CommandLineRunner {
     private Images2GpxCommandLineRunner() {}
 
     public void run(String[] args) {
-        Images2GpxCommandLineRunner argsContainer = new Images2GpxCommandLineRunner();
-        new JCommander(argsContainer, args);
+        Images2GpxCommandLineRunner jcContext = new Images2GpxCommandLineRunner();
+        new JCommander(jcContext, args);
 
-        String outputFilePath = String.format("%s", argsContainer.outputDirectory);
+        WriterContext wc = createWriterContext(jcContext);
 
-        System.out.println(String.format("Processing all files in directory \"%s\"", argsContainer.inputDirectory));
-        System.out.println(String.format("Writing to %s", outputFilePath));
+        System.out.println(String.format("Processing all files in directory \"%s\"", wc.getInputDirectory()));
+        System.out.println(String.format("Writing to %s", wc.getOutputDirectory()));
 
-        List<File> allImageFiles = fileReaderService.readFiles(argsContainer.inputDirectory, argsContainer.recursive);
+        List<File> allImageFiles = fileReaderService.readFiles(wc.getInputDirectory(), wc.getRecursive());
         List<I2GContainer> containers = metadataReaderService.getI2GContainers(allImageFiles);
         System.out.println(containers);
 
         // write coordinates to file
-        FileWriter writer = writerRegistry.get(argsContainer.outputType);
-        writer.write(containers, outputFilePath);
+        FileWriter writer = writerRegistry.get(jcContext.outputType);
+        writer.write(containers, wc);
         System.exit(0);
+    }
+
+    private WriterContext createWriterContext(Images2GpxCommandLineRunner args) {
+        if (args.outputType == OutputType.GOOGLE_MAPS_POLYLINES && StringUtils.isEmpty(args.apiKey)) {
+            System.out.println("for google-maps-polyline the attribute 'apikey' is required!");
+            System.out.println("You can create a new API Key here: https://console.developers.google.com/apis/credentials");
+            System.exit(0);
+        }
+
+        return WriterContext.builder()
+                .inputDirectory(args.inputDirectory)
+                .outputDirectory(args.outputDirectory)
+                .recursive(args.recursive)
+                .apiKey(args.apiKey)
+                .build();
     }
 }

@@ -11,6 +11,8 @@ parameters:(
   -o, --outputDirectory       Output Directory (default: your userhome)
   -t, --outputType            supported types [gpx, google-maps-markers, google-maps-polylines] (default: gpx)
   -r, --recursive             default: false
+  
+  --apikey                   Google Maps API Key. Only used for google-maps-polylines
 )
   
 Examples:

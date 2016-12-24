@@ -11,5 +11,5 @@ public interface FileWriter {
     String PROJECT_NAME = "Images2Gpx";
 
 
-    void write(List<I2GContainer> fileLocationMapping, String outputFilePath);
+    void write(List<I2GContainer> fileLocationMapping, WriterContext writerContext);
 }

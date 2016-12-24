@@ -47,4 +47,9 @@ public class GoogleMapsMarkersWriter extends AbstractTemplateWriter {
     protected String getTemplatePath() {
         return TEMPLATE_PATH;
     }
+
+    @Override
+    protected String getFilename() {
+        return "images2gpx-google-maps-with-markers.html";
+    }
 }
