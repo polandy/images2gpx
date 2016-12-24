@@ -12,9 +12,14 @@ import java.time.LocalDateTime;
  */
 @AllArgsConstructor
 @Data
-public class I2GContainer {
+public class I2GContainer implements Comparable<I2GContainer> {
     private File imagefile;
     private LocalDateTime captureDate;
     private GeoLocation location;
     private Integer gpsAltitude;
+
+    @Override
+    public int compareTo(I2GContainer other) {
+        return this.captureDate.compareTo(other.getCaptureDate());
+    }
 }

@@ -64,8 +64,9 @@ dependencies {
     compile 'com.drewnoakes:metadata-extractor:2.9.1'
     compile('org.springframework.boot:spring-boot-starter')
 
-    testCompile('org.springframework.boot:spring-boot-starter-test')
-    testCompile("junit:junit:4.12")
+    testCompile 'org.springframework.boot:spring-boot-starter-test'
+    testCompile 'junit:junit:4.12'
+//    testCpmpile 'org.testng:testng:6.8'
 }
 
 jaxb {

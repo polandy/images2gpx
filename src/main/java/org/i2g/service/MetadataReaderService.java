@@ -40,6 +40,7 @@ public class MetadataReaderService implements MetadataReader {
                 e.printStackTrace();
             }
         }
+        Collections.sort(photoLocations);
         return photoLocations;
     }
 
