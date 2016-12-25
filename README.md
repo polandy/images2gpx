@@ -12,12 +12,12 @@ parameters:(
   -t, --outputType            supported types [gpx, google-maps-markers, google-maps-polylines] (default: gpx)
   -r, --recursive             default: false
   
-  --apikey                   Google Maps API Key. Only used for google-maps-polylines
+  --apikey                    Google Maps API Key. Only used for google-maps-polylines
 )
   
 Examples:
   java -jar images2gpx.jar -i ~/pics/2015-journeyAroundTheWorld
-  java -jar images2gpx.jar -i ~/pics/2015-journeyAroundTheWorld -t google-maps-polylines -o ~/pics/2015-journeyAroundTheWorld
+  java -jar images2gpx.jar -i ~/pics/2015-journeyAroundTheWorld -t google-maps-polylines -o ~/pics/2015-journeyAroundTheWorld --apikey AIzaSyB3EXCldLFqH1Y2WbarPqMj_MOglBjCgAI
   java -jar images2gpx.jar -i ~/pics/all-my-journeys -t google-maps-markers --recursive
 ```
 ## build

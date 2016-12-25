@@ -41,7 +41,7 @@ public class Images2GpxCommandLineRunner implements CommandLineRunner {
             description = "Default: gpx, possible values:\n" +
                     "\tgpx\ta gpx file\n" +
                     "google-maps-markers\n" +
-                    "google-maps-polyline")
+                    "google-maps-polylines")
     private OutputType outputType = OutputType.GPX;
 
     @Parameter(names = {"-r", "--recursive"},
