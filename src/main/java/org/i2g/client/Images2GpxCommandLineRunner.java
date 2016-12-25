@@ -69,10 +69,7 @@ public class Images2GpxCommandLineRunner implements CommandLineRunner {
     public void run(String[] args) {
         Images2GpxCommandLineRunner jcContext = new Images2GpxCommandLineRunner();
         JCommander jCommander = new JCommander(jcContext, args);
-        if (jcContext.help) {
-            jCommander.usage();
-            System.exit(0);
-        }
+        ifHelpPrintAndExit(jcContext.help, jCommander);
 
         WriterContext wc = createWriterContext(jcContext);
 
@@ -87,6 +84,13 @@ public class Images2GpxCommandLineRunner implements CommandLineRunner {
         FileWriter writer = writerRegistry.get(jcContext.outputType);
         writer.write(containers, wc);
         System.exit(0);
+    }
+
+    private void ifHelpPrintAndExit(boolean help, JCommander jCommander) {
+        if (help) {
+            jCommander.usage();
+            System.exit(0);
+        }
     }
 
     private WriterContext createWriterContext(Images2GpxCommandLineRunner args) {
