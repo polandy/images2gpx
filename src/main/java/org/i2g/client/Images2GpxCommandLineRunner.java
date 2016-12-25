@@ -94,7 +94,7 @@ public class Images2GpxCommandLineRunner implements CommandLineRunner {
     }
 
     private WriterContext createWriterContext(Images2GpxCommandLineRunner args) {
-        if (args.outputType == OutputType.GOOGLE_MAPS_POLYLINES && StringUtils.isEmpty(args.apiKey)) {
+        if (args.outputType == OutputType.GM_POLYLINES && StringUtils.isEmpty(args.apiKey)) {
             System.out.println("for google-maps-polyline the attribute 'apikey' is required!");
             System.out.println("You can create a new API Key here: https://console.developers.google.com/apis/credentials");
         }

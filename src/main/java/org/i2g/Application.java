@@ -49,8 +49,8 @@ public class Application {
     public HashMap<OutputType, FileWriter> getWriterRegistry() {
         HashMap<OutputType, FileWriter> writers = new HashMap<>();
         writers.put(OutputType.GPX, gpxFileWriterService);
-        writers.put(OutputType.GOOGLE_MAPS_MARKERS, googleMapsMarkersWriter);
-        writers.put(OutputType.GOOGLE_MAPS_POLYLINES, googleMapsPolylinesWriter);
+        writers.put(OutputType.GM_MARKERS, googleMapsMarkersWriter);
+        writers.put(OutputType.GM_POLYLINES, googleMapsPolylinesWriter);
         return writers;
     }
 }
