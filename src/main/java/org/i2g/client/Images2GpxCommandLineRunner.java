@@ -35,27 +35,26 @@ public class Images2GpxCommandLineRunner implements CommandLineRunner {
     @Parameter(names = {"-o", "--outputDirectory"},
             validateWith = OutputDirectoryValidator.class,
             converter = FileConverter.class,
-            description = "Output directory")
+            description = "Output Directory")
     private File outputDirectory = new File(System.getProperty("user.dir"));
 
     @Parameter(names = {"-t", "outputType"},
             validateWith = OutputTypeValidator.class,
             converter = OutputTypeConverter.class,
-            description = "Default: gpx, possible values:\n" +
-                    "\tgpx\ta gpx file\n" +
-                    "google-maps-markers\n" +
-                    "google-maps-polylines")
+            description = "supported types [gpx, google-maps-markers, google-maps-polylines]")
     private OutputType outputType = OutputType.GPX;
 
     @Parameter(names = {"-r", "--recursive"},
-            description = "Read the inputDirectory recursively"
-    )
+            description = "Read the inputDirectory recursively")
     private boolean recursive = false;
 
-    @Parameter(names = {"--apikey"},
+    @Parameter(names = {"-k", "--apikey"},
             description = "Google Maps API Key. Only used for OutputType google-maps-polyline"
     )
     private String apiKey;
+
+    @Parameter(names = {"?", "-h", "--help"}, help = true)
+    boolean help = false;
 
     @NonNull
     private FileReader fileReaderService;
@@ -69,7 +68,8 @@ public class Images2GpxCommandLineRunner implements CommandLineRunner {
 
     public void run(String[] args) {
         Images2GpxCommandLineRunner jcContext = new Images2GpxCommandLineRunner();
-        new JCommander(jcContext, args);
+        JCommander jCommander = new JCommander(jcContext, args);
+        ifHelpPrintAndExit(jcContext.help, jCommander);
 
         WriterContext wc = createWriterContext(jcContext);
 
@@ -86,8 +86,15 @@ public class Images2GpxCommandLineRunner implements CommandLineRunner {
         System.exit(0);
     }
 
+    private void ifHelpPrintAndExit(boolean help, JCommander jCommander) {
+        if (help) {
+            jCommander.usage();
+            System.exit(0);
+        }
+    }
+
     private WriterContext createWriterContext(Images2GpxCommandLineRunner args) {
-        if (args.outputType == OutputType.GOOGLE_MAPS_POLYLINES && StringUtils.isEmpty(args.apiKey)) {
+        if (args.outputType == OutputType.GM_POLYLINES && StringUtils.isEmpty(args.apiKey)) {
             System.out.println("for google-maps-polyline the attribute 'apikey' is required!");
             System.out.println("You can create a new API Key here: https://console.developers.google.com/apis/credentials");
         }

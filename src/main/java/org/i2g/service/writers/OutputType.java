@@ -5,17 +5,13 @@ import java.util.List;
 
 public enum OutputType {
     GPX("gpx"),
-    GOOGLE_MAPS_MARKERS("google-maps-markers"),
-    GOOGLE_MAPS_POLYLINES("google-maps-polylines");
+    GM_MARKERS("google-maps-markers"),
+    GM_POLYLINES("google-maps-polylines");
 
     String value;
 
     OutputType(String value) {
         this.value = value;
-    }
-
-    String getAllTypesForDescription() {
-        return OutputType.values().toString();
     }
 
     public String getValue() {
