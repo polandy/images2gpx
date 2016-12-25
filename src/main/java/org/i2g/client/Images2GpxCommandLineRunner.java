@@ -2,10 +2,7 @@ package org.i2g.client;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import org.apache.commons.lang3.StringUtils;
 import org.i2g.client.argument.converter.FileConverter;
 import org.i2g.client.argument.converter.OutputTypeConverter;
@@ -25,6 +22,7 @@ import java.util.Map;
 
 @RequiredArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Getter
 public class Images2GpxCommandLineRunner implements CommandLineRunner {
 
     @Parameter(names = {"-i", "--inputDirectory"},
@@ -54,7 +52,7 @@ public class Images2GpxCommandLineRunner implements CommandLineRunner {
     private String apiKey;
 
     @Parameter(names = {"?", "-h", "--help"}, help = true)
-    boolean help = false;
+    private boolean help = false;
 
     @NonNull
     private FileReader fileReaderService;
@@ -69,7 +67,7 @@ public class Images2GpxCommandLineRunner implements CommandLineRunner {
     public void run(String[] args) {
         Images2GpxCommandLineRunner jcContext = new Images2GpxCommandLineRunner();
         JCommander jCommander = new JCommander(jcContext, args);
-        ifHelpPrintAndExit(jcContext.help, jCommander);
+        ifHelpPrintAndExit(jcContext.isHelp(), jCommander);
 
         WriterContext wc = createWriterContext(jcContext);
 
@@ -93,16 +91,16 @@ public class Images2GpxCommandLineRunner implements CommandLineRunner {
     }
 
     private WriterContext createWriterContext(Images2GpxCommandLineRunner args) {
-        if (args.outputType == OutputType.GM_POLYLINES && StringUtils.isEmpty(args.apiKey)) {
+        if (args.getOutputType() == OutputType.GM_POLYLINES && StringUtils.isEmpty(args.getApiKey())) {
             System.out.println("for google-maps-polyline the attribute 'apikey' is required!");
             System.out.println("You can create a new API Key here: https://console.developers.google.com/apis/credentials");
         }
 
         return WriterContext.builder()
-                .inputDirectory(args.inputDirectory)
-                .outputDirectory(args.outputDirectory)
-                .recursive(args.recursive)
-                .apiKey(args.apiKey)
+                .inputDirectory(args.getInputDirectory())
+                .outputDirectory(args.getOutputDirectory())
+                .recursive(args.isRecursive())
+                .apiKey(args.getApiKey())
                 .build();
     }
 }
