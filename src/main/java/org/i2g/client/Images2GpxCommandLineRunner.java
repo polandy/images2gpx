@@ -2,6 +2,10 @@ package org.i2g.client;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.i2g.client.argument.converter.FileConverter;
 import org.i2g.client.argument.converter.OutputTypeConverter;
@@ -13,15 +17,14 @@ import org.i2g.service.MetadataReader;
 import org.i2g.service.writers.FileWriter;
 import org.i2g.service.writers.OutputType;
 import org.i2g.service.writers.WriterContext;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.util.List;
 import java.util.Map;
 
-@Component
+@RequiredArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Images2GpxCommandLineRunner implements CommandLineRunner {
 
     @Parameter(names = {"-i", "--inputDirectory"},
@@ -54,20 +57,15 @@ public class Images2GpxCommandLineRunner implements CommandLineRunner {
     )
     private String apiKey;
 
-    @Autowired
+    @NonNull
     private FileReader fileReaderService;
 
-    @Autowired
+    @NonNull
     private MetadataReader metadataReaderService;
 
-    @Autowired
+    @NonNull
     private Map<OutputType, FileWriter> writerRegistry;
 
-    public Images2GpxCommandLineRunner(Map<OutputType, FileWriter> writerRegistry) {
-        this.writerRegistry = writerRegistry;
-    }
-
-    private Images2GpxCommandLineRunner() {}
 
     public void run(String[] args) {
         Images2GpxCommandLineRunner jcContext = new Images2GpxCommandLineRunner();
@@ -92,7 +90,6 @@ public class Images2GpxCommandLineRunner implements CommandLineRunner {
         if (args.outputType == OutputType.GOOGLE_MAPS_POLYLINES && StringUtils.isEmpty(args.apiKey)) {
             System.out.println("for google-maps-polyline the attribute 'apikey' is required!");
             System.out.println("You can create a new API Key here: https://console.developers.google.com/apis/credentials");
-            System.exit(0);
         }
 
         return WriterContext.builder()

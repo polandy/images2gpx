@@ -1,6 +1,8 @@
 package org.i2g;
 
 import org.i2g.client.Images2GpxCommandLineRunner;
+import org.i2g.service.FileReader;
+import org.i2g.service.MetadataReader;
 import org.i2g.service.writers.FileWriter;
 import org.i2g.service.writers.OutputType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,10 +32,16 @@ public class Application {
     @Qualifier("googleMapsPolylinesWriter")
     private FileWriter googleMapsPolylinesWriter;
 
+    @Autowired
+    @Qualifier("fileReaderService")
+    private FileReader fileReaderService;
+
+    @Autowired
+    private MetadataReader metadataReaderService;
 
     @Bean
     public Images2GpxCommandLineRunner getImages2GpxCommandLineRunner() {
-        return new Images2GpxCommandLineRunner(getWriterRegistry());
+        return new Images2GpxCommandLineRunner(fileReaderService, metadataReaderService, getWriterRegistry());
     }
 
     @Bean
