@@ -7,6 +7,7 @@ import org.i2g.service.writers.FileWriter;
 import org.i2g.service.writers.OutputType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -40,7 +41,7 @@ public class Application {
     private MetadataReader metadataReaderService;
 
     @Bean
-    public Images2GpxCommandLineRunner getImages2GpxCommandLineRunner() {
+    public CommandLineRunner getImages2GpxCommandLineRunner() {
         return new Images2GpxCommandLineRunner(fileReaderService, metadataReaderService, getWriterRegistry());
     }
 
