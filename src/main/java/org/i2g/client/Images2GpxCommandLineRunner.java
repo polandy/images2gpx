@@ -83,7 +83,6 @@ public class Images2GpxCommandLineRunner implements CommandLineRunner {
         // write coordinates to file
         FileWriter writer = writerRegistry.get(jcContext.outputType);
         writer.write(containers, wc);
-        System.exit(0);
     }
 
     private void ifHelpPrintAndExit(boolean help, JCommander jCommander) {
